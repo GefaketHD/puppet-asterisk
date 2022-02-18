@@ -206,7 +206,8 @@ define asterisk::sip (
   Optional[String]                           $encryption        = '',
   Array[Asterisk::Access]                    $access            = [],
   Optional[Enum['yes', 'no']]                $trustrpid         = undef,
-  Optional[Enum['yes', 'no', 'pai', 'rpid']] $sendrpid          = undef
+  Optional[Enum['yes', 'no', 'pai', 'rpid']] $sendrpid          = undef,
+  Optional[String[1]]                        $peername          = undef,
 ) {
 
   if $directrtpsetup =~ Boolean {
@@ -215,6 +216,8 @@ define asterisk::sip (
   else {
     $real_directrtpsetup = $directrtpsetup
   }
+
+  $real_name = $peername ? { undef => $name, default => $peername }
 
   asterisk::dotd::file { "sip_${name}.conf":
     ensure   => $ensure,
